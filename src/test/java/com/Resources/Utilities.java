@@ -8,18 +8,21 @@ import java.util.Properties;
 
 public class Utilities
 {
-	public void readPropertyFile() throws IOException
+	
+	
+	
+	
+	public String readPropertyFile(String Key) throws IOException
 	{
 		//FileReader will read data from the created file byte by byte
 		FileReader file = new FileReader("C:\\Users\\ACER\\RestAssuredContPractice\\RestAssured\\src\\test\\java\\com\\Resources\\Global.properties");
 		
+		//Properties class provides the methods to accept the stream of characters
 		Properties prop = new Properties();
+		//load method actually load the file in which the data (stream of characters) is present
 		prop.load(file);
 		
-		String Domain= prop.getProperty("Domain");
-		
-		
-		System.out.println("The Domain = " +Domain);
+		return prop.getProperty(Key);
 	}
 	
 	
