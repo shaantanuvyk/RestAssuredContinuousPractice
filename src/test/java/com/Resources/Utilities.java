@@ -5,14 +5,26 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
 
+import io.restassured.path.json.JsonPath;
+import io.restassured.response.Response;
 
 public class Utilities
 {
+
 	
 	
 	
 	
-	public String readPropertyFile(String Key) throws IOException
+	public String jsonPath(Response response, String Keyword)
+	{
+		String res = response.asString();
+		JsonPath jpath = new JsonPath(res);
+		String result = jpath.get(Keyword).toString();
+		return result;
+	}
+	
+	
+	public String readProperty(String Key) throws IOException
 	{
 		//FileReader will read data from the created file byte by byte
 		FileReader file = new FileReader("C:\\Users\\ACER\\RestAssuredContPractice\\RestAssured\\src\\test\\java\\com\\Resources\\Global.properties");

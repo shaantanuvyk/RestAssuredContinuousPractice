@@ -2,9 +2,10 @@ Feature: Verifying the APIs for the Location
 
   @SanityTests
   Scenario: Verify the Get Location API
-    Given Verify sending the get request
-    When using "getResource" and "methodType"
+    Given Verify sending the get request "DummyDomainURL"
+    When using "DummygetUserResource" and "get"
     Then status of the response should be 200
+    And get the "users.id[0]"
 
 ##  @Regression
 ##	Scenario Outline: Verify the Create Location API

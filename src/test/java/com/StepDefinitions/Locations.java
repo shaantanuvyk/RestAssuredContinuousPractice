@@ -3,33 +3,40 @@ package com.StepDefinitions;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
-import io.restassured.specification.ResponseSpecification;
 
 import static io.restassured.RestAssured.*;
 import static org.junit.Assert.assertEquals;
 
-public class Locations 
-{
-	
-	RequestSpecification requestsb;
-	ResponseSpecification responsesb;
+import java.io.IOException;
+
+import com.Resources.Utilities;
+
+public class Locations extends Utilities
+{	
+	public static RequestSpecification requestsb;
+	public static RequestSpecification request;
 	static Response response;
-	String URL = "https://rahulshettyacademy.com";
-	String getResource = "";
-	String addResource = "maps/api/place/add/json";
-	
-	@Given("Verify sending the get request")
-	public void verify_sending_the_get_request() {
+
+	@Given("Verify sending the get request {string}")
+	public void verify_sending_the_get_request(String baseURL) throws IOException {
 		
-	    requestsb = given().baseUri(URL).queryParam("key","qaclick123").queryParam("place_id","5e1260413bb6de74bc1bef6a9994f2c9");
+	    requestsb = new RequestSpecBuilder().setBaseUri(readProperty(baseURL)).build();
+	    		//.addParam("key","qaclick123").addParam("place_id","5e1260413bb6de74bc1bef6a9994f2c9").build();
+	    request=given().spec(requestsb);
+	    		//queryParam("key","qaclick123").queryParam("place_id","5e1260413bb6de74bc1bef6a9994f2c9");
+	    System.out.println("baseURL is ===========" +readProperty(baseURL));
+	    
 	}	
 
 	@When("using {string} and {string}")
-	public void using_and(String string, String string2) {
-		response = requestsb.
-    			when().get("maps/api/place/get/json").
+	public void using_and(String resource, String methodType) throws IOException {
+		System.out.println("resource is ===========" +readProperty(resource));
+		
+		response = given().spec(requestsb).
+    			when().get(readProperty(resource)).
     			then().extract().response();
 		
 		System.out.println("Response is: " +response);
@@ -41,5 +48,13 @@ public class Locations
 		System.out.println("Status Code is: " +response.statusCode());
 		assertEquals(response.statusCode(), StatusCode);
 		
+	}
+	
+	@Then("get the {string}")
+	public void get_the(String Value) {
+		
+		String result = jsonPath(response, Value);
+		System.out.println("ID is====== " +result);
+		assertEquals(1, Integer.parseInt(result));
 	}
 }
