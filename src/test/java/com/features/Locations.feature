@@ -5,7 +5,7 @@ Feature: Verifying the APIs for the Location
     Given Verify sending the get request "DummyDomainURL"
     When using "DummygetUserResource" and "get"
     Then status of the response should be 200
-    And get the "users.id[0]"
+    And get the "users.id[1]"
 
 ##  @Regression
 ##	Scenario Outline: Verify the Create Location API
