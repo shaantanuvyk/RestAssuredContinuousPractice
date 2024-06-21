@@ -32,7 +32,7 @@ public class TestClass
 		String res = response.asString();
 		
 		JsonPath jPath = new JsonPath(res);
-		int id = jPath.get("users.id[0]");
+		int id = jPath.get("users.id[1]");
 		System.out.println("Phone Number is: " +id);
 		
 	}
