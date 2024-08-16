@@ -32,8 +32,8 @@ public class TestClass
 		String res = response.asString();
 		
 		JsonPath jPath = new JsonPath(res);
-		int id = jPath.get("users.id[1]");
-		System.out.println("Phone Number is: " +id);
+		String phone = jPath.get("users.phone[0]");
+		System.out.println("Phone Number is: " +phone);
 		
 	}
 }
