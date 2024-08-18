@@ -41,10 +41,10 @@ public class Utilities
 		String response = responseResult.asString();
 		
 		//Creating a JsonPath object
-		JsonPath jpath = new JsonPath(response);
+		JsonPath jpath1 = new JsonPath(response);
 		
 		//Creating a String to store the value required/passed through the script
-		String result = jpath.getString(jPath1);
+		String result = jpath1.get(jPath1);
 		
 		return result; 
 	}
@@ -57,9 +57,7 @@ public class Utilities
 		
 		prop.load(filereader);
 		
-		prop.get(key);
-		
-		return GlobalProperties1(key);
+		return prop.getProperty(key);
 	}
 	
 	
