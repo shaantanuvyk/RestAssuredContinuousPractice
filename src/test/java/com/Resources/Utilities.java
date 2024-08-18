@@ -1,6 +1,7 @@
 package com.Resources;
 
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
@@ -10,11 +11,6 @@ import io.restassured.response.Response;
 
 public class Utilities
 {
-
-	
-	
-	
-	
 	public String jsonPath(Response response, String Keyword)
 	{
 		String res = response.asString();
@@ -31,11 +27,57 @@ public class Utilities
 		
 		//Properties class provides the methods to accept the stream of characters
 		Properties prop = new Properties();
+		
 		//load method actually load the file in which the data (stream of characters) is present
 		prop.load(file);
 		
 		return prop.getProperty(Key);
 	}
+	
+	
+	public String JsonPath1(Response responseResult, String jPath1)
+	{
+		//Getting the respopnse body as String
+		String response = responseResult.asString();
+		
+		//Creating a JsonPath object
+		JsonPath jpath = new JsonPath(response);
+		
+		//Creating a String to store the value required/passed through the script
+		String result = jpath.getString(jPath1);
+		
+		return result; 
+	}
+	
+	public String GlobalProperties1(String key) throws IOException
+	{
+		FileReader filereader = new FileReader("C:\\Users\\ACER\\RestAssuredContPractice\\RestAssured\\src\\test\\java\\com\\Resources\\Global.properties");
+		
+		Properties prop = new Properties();
+		
+		prop.load(filereader);
+		
+		prop.get(key);
+		
+		return GlobalProperties1(key);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
