@@ -15,8 +15,10 @@ import com.Resources.Utilities;
 
 public class Locations1 extends Utilities
 {
-	static RequestSpecification request;
-	Response response;
+	RequestSpecification request;
+	static Response response;
+	int StatusCode;
+	static String PlaceID;
 
 	@Given("Verify user can add a location using {string}")
 	public void verify_user_can_add_a_location_using(String URL) throws IOException 
@@ -45,11 +47,34 @@ public class Locations1 extends Utilities
 	@When("using resource {string} and method as {string}")
 	public void using_resource_and_method_as(String Resource, String Method) throws IOException 
 	{
-	    response = request.
-	    		post(GlobalProperties1(Resource)).
-	    		then().extract().response();
+		if(Method.equalsIgnoreCase("post"))
+		{
+			response = request.
+		    post(GlobalProperties1(Resource)).
+		    then().extract().response();
+		}
+		else if(Method.equalsIgnoreCase("get"))
+		{
+			response = request.
+		    get(GlobalProperties1(Resource)).
+		    then().log().all().extract().response();
+		}
+		
+		else if(Method.equalsIgnoreCase("put"))
+		{
+			response = request.
+		    put(GlobalProperties1(Resource)).
+		    then().extract().response();
+		}
+		
+		else if(Method.equalsIgnoreCase("delete"))
+		{
+			response = request.
+		    delete(GlobalProperties1(Resource)).
+		    then().extract().response();
+		}
 	}
-
+	
 	@Then("status should be {string} with status code as {int}")
 	public void status_should_be_with_status_code_as(String Status, int StatusCode) 
 	{
@@ -62,9 +87,25 @@ public class Locations1 extends Utilities
 	public void get_the_value(String value) 
 	{
 		
-		String Value= jsonPath(response, value);
-		System.out.println("VALUE: " +Value);
+		PlaceID= jsonPath(response, value);
+		System.out.println("VALUE: " +PlaceID);
 	}
 	
+	//-----------------------------------------------------------------------------------------------------------------//
 	
+	@Given("Verify user can be fetched using {string}")
+	public void verify_user_can_be_fetched_using(String string) throws IOException 
+	{
+		request = given().baseUri(GlobalProperties1("BaseURL")).queryParam("key", "qaclick123").queryParam("place_id", PlaceID).header("Content-Type","application/json");
+	}
+
+	
+	@Then("get the value {string} and {string}")
+	public void get_the_value_and(String Name, String PhoneNumber) 
+	{
+		String name= jsonPath(response, Name);
+		String phoneNumber= jsonPath(response, PhoneNumber);
+		
+		System.out.println("Name: " +name+ " and Phone Number: " +phoneNumber);
+	} 
 }
