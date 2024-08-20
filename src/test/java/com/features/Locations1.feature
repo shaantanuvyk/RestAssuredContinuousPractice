@@ -6,4 +6,8 @@ Scenario: Verify adding a location
 	Then status should be "OK" with status code as 200
 	And get the value "place_id"
 	
-	Scenario: Verify 
+	Scenario: Verify location can be fetched
+		Given 
+		When 
+		Then
+		And 
