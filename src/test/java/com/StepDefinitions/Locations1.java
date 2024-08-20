@@ -18,7 +18,7 @@ public class Locations1 extends Utilities
 	RequestSpecification request;
 	static Response response;
 	int StatusCode;
-	static String PlaceID;
+	static String place_id;
 
 	@Given("Verify user can add a location using {string}")
 	public void verify_user_can_add_a_location_using(String URL) throws IOException 
@@ -51,7 +51,7 @@ public class Locations1 extends Utilities
 		{
 			response = request.
 		    post(GlobalProperties1(Resource)).
-		    then().extract().response();
+		    then().log().all().extract().response();
 		}
 		else if(Method.equalsIgnoreCase("get"))
 		{
@@ -64,14 +64,14 @@ public class Locations1 extends Utilities
 		{
 			response = request.
 		    put(GlobalProperties1(Resource)).
-		    then().extract().response();
+		    then().log().all().extract().response();
 		}
 		
 		else if(Method.equalsIgnoreCase("delete"))
 		{
 			response = request.
 		    delete(GlobalProperties1(Resource)).
-		    then().extract().response();
+		    then().log().all().extract().response();
 		}
 	}
 	
@@ -79,24 +79,26 @@ public class Locations1 extends Utilities
 	public void status_should_be_with_status_code_as(String Status, int StatusCode) 
 	{
 		int status = response.statusCode();
-		System.out.println("Status Line" +response.statusLine());
+		//System.out.println("Status Line" +response.statusLine());
 		assertEquals(StatusCode, status);
 	}
 
 	@Then("get the value {string}")
-	public void get_the_value(String value) 
+	public void get_the_value(String Value) 
 	{
 		
-		PlaceID= jsonPath(response, value);
-		System.out.println("VALUE: " +PlaceID);
+		place_id= jsonPath(response, Value);
+		//place_id=this.PlaceID;
+		System.out.println("VALUE: " +place_id);
 	}
 	
 	//-----------------------------------------------------------------------------------------------------------------//
 	
 	@Given("Verify user can be fetched using {string}")
-	public void verify_user_can_be_fetched_using(String string) throws IOException 
+	public void verify_user_can_be_fetched_using(String place_id) throws IOException 
 	{
-		request = given().baseUri(GlobalProperties1("BaseURL")).queryParam("key", "qaclick123").queryParam("place_id", PlaceID).header("Content-Type","application/json");
+		place_id = this.place_id;
+		request = given().baseUri(GlobalProperties1("BaseURL")).queryParam("key", "qaclick123").queryParam("place_id", place_id).header("Content-Type","application/json");
 	}
 
 	
@@ -106,6 +108,54 @@ public class Locations1 extends Utilities
 		String name= jsonPath(response, Name);
 		String phoneNumber= jsonPath(response, PhoneNumber);
 		
-		System.out.println("Name: " +name+ " and Phone Number: " +phoneNumber);
+		System.out.println("Name: " +name+ " and Address: " +phoneNumber);
 	} 
+	
+	//-----------------------------------------------------------------------------------------------------------------//
+	
+	@Given("Verify user can update the location using {string} and address as {string}")
+	public void verify_user_can_update_the_location_using_and_address_as(String place_id, String Address) throws IOException 
+	{
+		place_id=this.place_id;
+		request = given().baseUri(GlobalProperties1("BaseURL")).queryParam("key", "qaclick123").header("Content-Type","application/json").
+				body("{\r\n"
+						+ "    \"place_id\": \""+place_id+"\",\r\n"
+						+ "    \"address\": \""+Address+"\",\r\n"
+						+ "    \"key\": \"qaclick123\"\r\n"
+						+ "}");
+	}
+
+	@Then("response should be {string}")
+	public void response_should_be(String string) 
+	{
+		String PutResponseMessage= jsonPath(response, "msg");
+		assertEquals(PutResponseMessage, "Address successfully updated");
+	}
+	
+	//-----------------------------------------------------------------------------------------------------------------//
+	
+	@Given("Verify user delete the {string}")
+	public void verify_user_delete_the(String string) throws IOException 
+	{
+	    request= given().baseUri(GlobalProperties1("BaseURL")).queryParam("key", "qaclick123").header("Content-Type","application/json").
+	    		body("{\r\n"
+	    				+ "    \"place_id\":\""+place_id+"\"\r\n"
+	    				+ "}");
+	}
+
+	@Then("the response status should be {string}")
+	public void the_response_status_should_be(String string) 
+	{
+		String DeleteResponseMessage = jsonPath(response, "status");
+		assertEquals(DeleteResponseMessage, "OK");
+	}
+	
+	//-----------------------------------------------------------------------------------------------------------------//
+	
+	@Then("the response status should be")
+	public void the_response_status_should_be() 
+	{
+	    String GetResponseForDeletedPlaceID= jsonPath(response, "msg");
+	    assertEquals(GetResponseForDeletedPlaceID, "Get operation failed, looks like place_id  doesn't exists");
+	}
 }
