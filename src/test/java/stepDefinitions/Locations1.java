@@ -1,4 +1,4 @@
-package com.StepDefinitions;
+package stepDefinitions;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -21,9 +21,9 @@ public class Locations1 extends Utilities
 	static String place_id;
 
 	@Given("Verify user can add a location using {string}")
-	public void verify_user_can_add_a_location_using(String URL) throws IOException 
+	public void verify_user_can_add_a_location_using(String BaseURL) throws IOException 
 	{
-		request = given().baseUri(GlobalProperties1(URL)).queryParam("key", "qaclick123").header("Content-Type","application/json").
+		request = given().baseUri(GlobalProperties1(BaseURL)).queryParam("key", "qaclick123").header("Content-Type","application/json").
 				body("{\r\n"
 						+ "    \"location\": {\r\n"
 						+ "        \"lat\": -21.06199,\r\n"
