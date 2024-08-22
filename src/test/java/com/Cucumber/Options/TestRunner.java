@@ -11,7 +11,6 @@ import io.cucumber.junit.CucumberOptions;
 		features="src/test/java/features",
 		glue={"stepDefinitions"},
 		tags="@SanityTest"
-		
 //		plugin ="html:target/jsonReports/cucumber-report.html",
 		)
 

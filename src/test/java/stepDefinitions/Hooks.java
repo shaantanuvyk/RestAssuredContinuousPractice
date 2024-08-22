@@ -28,5 +28,4 @@ public class Hooks
 		locations1.using_resource_and_method_as("AddResource", "post");
 		locations1.get_the_value("place_id");
 	}
-	
 }
